@@ -6,35 +6,40 @@
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title></title>
 	<style type="text/css">
-		html,body{padding: 0;margin: 0;height: 100%;}
+		html,body{padding: 0;margin: 0;height: 100%;background-color: #333;}
 		.container{height: 100%;display: flex;flex-direction: column;}
 		#main{background-color: #f0f0f0;}
-		#myimg{width: 100%;}
-		.btn-box{text-align: center;}
-		.btn-box .btn{background-color:#5E98F3;color: #fff;padding: 10px;}
+		.btn-box{display: flex;align-items: center;justify-content: center;}
+		.btn-box .btn{color: #fff;padding: 10px;}
 		.canvas-box{flex: 1;display: flex;justify-content: center;align-items: center;}
 	</style>
 </head>
 <body>
 	<div class="container">
 		<div class="btn-box">
+			<div class="btn" onclick="prveStep()">上一步</div>
+			<div class="btn" onclick="nextStep()">下一步</div>
 			<div class="btn" onclick="createPoster()">预览</div>
 		</div>
 		<div class="canvas-box">
 			<canvas id="main" width='355' height='473'></canvas>
 		</div>
 		<div class="btn-box">
+			<div class="btn" onclick="addText('添加文字',kayCanvasData.length)">加字</div>
 			<label>
 				<div class="btn">加图</div>
 				<input type="file" id="upimg" name="file" accept="image/png,image/jpg,image/jpeg" id="file" onchange="changeToop();" style="display:none;" />
 			</label>
 		</div>
-	</div> 
-	<img src="" id="myimg">
+	</div>
 </body>
 <script src="js/fabric.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="js/customiseControls.min.js" type="text/javascript" charset="utf-8"></script>
 <script>
+	var storageCanvasData = [];
+	var canvasIdx = 0;
+	var kayCanvasData = []
+	storageCanvasData.push(kayCanvasData)
 	var cWidth = document.getElementById('main').clientWidth
 	var cHeight = document.getElementById('main').clientHeight
 	fabric.Object.prototype.set({
@@ -49,13 +54,30 @@
 	    tr: {
 			action: function (e, target) {
 	            target.clone(function (cloneObj) {
-	               cloneObj.set({
-	                 left: cloneObj.left + 20,
-	                 top: cloneObj.top + 20
-	               })
-	               cloneObj.setCoords()
-	               canvas.add(cloneObj)
-	               canvas.renderAll()
+					cloneObj.set({
+						left: cloneObj.left + 20,
+						top: cloneObj.top + 20
+					})
+					cloneObj.setCoords()
+					canvas.add(cloneObj)
+					canvas.renderAll()
+					let arr = JSON.parse(JSON.stringify(kayCanvasData))
+					arr.push({
+					   	type:cloneObj.type,
+					   	cont:cloneObj.type=='text'?cloneObj.text:cloneObj.src,
+					   	opstion:{
+					   		left:cloneObj.left,
+					   		top:cloneObj.top,
+					   		originX:cloneObj.originX||'center',
+					   		originY:cloneObj.originY||'center',
+					   		scaleX:cloneObj.scaleX||1,
+					   		scaleY:cloneObj.scaleY||1,
+					   		angle:cloneObj.angle||0
+					   	}
+					 })
+					kayCanvasData = arr
+					storageCanvasData.push(arr)
+					canvasIdx = storageCanvasData.length-1
 	            })
 	        },
 			cursor:'pointer'
@@ -87,26 +109,140 @@
 	    canvas.renderAll();
 	});
 	function changeToop(){
-		let url = window.URL.createObjectURL(document.getElementById('upimg').files.item(0));
-		addImg(url)
+		var url = window.URL.createObjectURL(document.getElementById('upimg').files.item(0));
+		addImg(url,this.kayCanvasData.length)
 	}
-	function addImg(src,opstion){
-		let data = opstion?opstion:'';
-		let img = new Image()
-		img.src = src
-		img.onload = function(){
-			if(!data){
-				data = {}
-				data.left = (cWidth/2)-(img.width/2)
-				data.top = (cHeight/2)-(img.height/2)
+	// 加入图片src:图片路径、opstion配置
+	function addImg(src,idx,opstion,type){
+		var data = opstion?opstion:'';
+		if(!data){
+			data = {}
+			data.left = (cWidth/2)
+			data.top = (cHeight/2)
+			data.originX = 'center'
+			data.originY = 'center'
+		}
+		fabric.Image.fromURL(src, function(res) {
+			if(!type){
+				res.on('added',function(){
+					let arr = JSON.parse(JSON.stringify(kayCanvasData))
+					arr.push({
+						type:'image',
+						cont:src,
+						opstion:{
+							left:this.left,
+							top:this.top,
+							originX:this.originX||'center',
+							originY:this.originY||'center',
+							scaleX:this.scaleX||1,
+							scaleY:this.scaleY||1,
+							angle:this.angle||0
+						}
+					})
+					kayCanvasData = arr
+					storageCanvasData.push(arr)
+					canvasIdx = storageCanvasData.length-1
+				})
 			}
-			fabric.Image.fromURL(src, function(res) {
-				canvas.add(res);
-			},data);
+			res.on('modified',function(){
+				let arr = JSON.parse(JSON.stringify(kayCanvasData))
+				arr[idx].cont = this.src
+				arr[idx].opstion = {
+					left:this.left,
+					top:this.top,
+					originX:this.originX||'center',
+					originY:this.originY||'center',
+					scaleX:this.scaleX||1,
+					scaleY:this.scaleY||1,
+					angle:this.angle||0
+				}
+				kayCanvasData = arr
+				storageCanvasData.push(arr)
+				canvasIdx = storageCanvasData.length-1
+			})
+			canvas.add(res);
+		},data);
+	}
+	// 加入文本:字符串、opstion配置
+	function addText(string,idx,opstion,type){
+		var data = opstion?opstion:'';
+		if(!data){
+			data = {}
+			data.left = (cWidth/2)
+			data.top = (cHeight/2)
+			data.originX = 'center'
+			data.originY = 'center'
+		}
+		var res = new fabric.IText(string,data);
+		if(!type){
+			res.on('added',function(){
+				let arr = JSON.parse(JSON.stringify(kayCanvasData))
+				arr.push({
+					type:'text',
+					cont:this.text,
+					opstion:{
+						left:this.left,
+						top:this.top,
+						originX:this.originX||'center',
+						originY:this.originY||'center',
+						scaleX:this.scaleX||1,
+						scaleY:this.scaleY||1,
+						angle:this.angle||0
+					}
+				})
+				kayCanvasData = arr
+				storageCanvasData.push(arr)
+				canvasIdx = storageCanvasData.length-1
+			})
+		}
+		res.on('modified',function(){
+			console.log(this)
+			let arr = JSON.parse(JSON.stringify(kayCanvasData))
+			arr[idx].cont = this.text
+			arr[idx].opstion = {
+				left:this.left,
+				top:this.top,
+				originX:this.originX||'center',
+				originY:this.originY||'center',
+				scaleX:this.scaleX||1,
+				scaleY:this.scaleY||1,
+				angle:this.angle||0
+			}
+			kayCanvasData = arr
+			storageCanvasData.push(arr)
+			canvasIdx = storageCanvasData.length-1
+		})
+		canvas.add(res);
+	}
+	// 上一步
+	function prveStep(){
+		if(canvasIdx>0){
+			canvasIdx--
+			canvasRestrt(storageCanvasData[canvasIdx])
+		}
+		console.log(canvasIdx)
+	}
+	// 下一步
+	function nextStep(){
+		if(canvasIdx<storageCanvasData.length-1){
+			canvasIdx++
+			canvasRestrt(storageCanvasData[canvasIdx])
+		}
+		console.log(canvasIdx)
+	}
+	function canvasRestrt(data){
+		canvas.clear()
+		for (var i = 0; i < data.length; i++) {
+			if(data[i].type=='image'){
+				addImg(data[i].cont,i,data[i].opstion,'xr')
+			}else{
+				addText(data[i].cont,i,data[i].opstion,'xr')
+			}
 		}
 	}
+	// 生成海报预览
 	function createPoster(){
-		let src = canvas.toDataURL({
+		var src = canvas.toDataURL({
 			format:'png',
 			quality:1,
 			left:0,
@@ -114,7 +250,8 @@
 			width:cWidth,
 			height:cHeight
 		});
-		document.getElementById("myimg").src = src
+		localStorage.setItem("kayimgsrc", src);
+		window.location.href = 'img.html'
 	}
 </script>
 </html>
