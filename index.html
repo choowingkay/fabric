@@ -109,8 +109,13 @@
 	    canvas.renderAll();
 	});
 	function changeToop(){
-		var url = window.URL.createObjectURL(document.getElementById('upimg').files.item(0));
-		addImg(url,this.kayCanvasData.length)
+		var file = document.getElementById('upimg').files[0];
+		var reader = new FileReader();
+		reader.readAsDataURL(file);
+		reader.onloadend = function(e) {
+			addImg(e.target.result,kayCanvasData.length)
+		};
+		
 	}
 	// 加入图片src:图片路径、opstion配置
 	function addImg(src,idx,opstion,type){
@@ -144,9 +149,8 @@
 					canvasIdx = storageCanvasData.length-1
 				})
 			}
-			res.on('modified',function(){
+			res.on('modified',function(e){
 				let arr = JSON.parse(JSON.stringify(kayCanvasData))
-				arr[idx].cont = this.src
 				arr[idx].opstion = {
 					left:this.left,
 					top:this.top,
