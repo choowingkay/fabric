@@ -1,7 +1,7 @@
 
 // 画布宽高
 var cWidth = 355
-var cHeight = 1000
+var cHeight = 800
 var storageCanvasData = [];//缓存步骤数据
 var canvasIdx = 0;//步骤下标
 var setIdx = 0;//对象下标
@@ -11,6 +11,8 @@ var timer = null;//计时器
 $("#main").attr({width:cWidth,height:cHeight})
 // 实例化对象
 var canvas = new fabric.Canvas('main');
+$("canvas").css("touch-action","auto");
+canvas.selection = false;	
 // 编辑框内边距
 fabric.Object.prototype.set({
 	padding:5
