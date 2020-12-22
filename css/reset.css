@@ -1,0 +1,78 @@
+@charset "utf-8";
+/*=========================Reset_start==========================*/
+body,h1,h2,h3,h4,h5,h6,div,p,dl,dt,dd,ol,ul,li,form,table,th,td,a,img,span,strong,var,em,input,textarea,select,option{margin: 0; padding: 0;}
+html,body{font-family:"Microsoft YaHei","微软雅黑","宋体",Arail,Tabhoma; font-size: 14px; text-align: left;}
+h1,h2,h3,h4,h5,h6{font-weight: normal;}
+ul,ol{list-style: none;}
+img{border: 0;}
+input,select,textarea{outline:0;}
+textarea{resize:none;}
+table{border-collapse: collapse; border-spacing: 0;}
+th,strong,var,em{font-weight: normal; font-style: normal;}
+a{text-decoration: none;color: #333;}
+a:link,a:visited,a:hover,a:active{text-decoration:none;}
+
+/*google video 隐藏下载按钮*/
+/*video::-internal-media-controls-download-button {
+    display:none;
+}
+video::-webkit-media-controls-enclosure {
+    overflow:hidden;
+}
+ video::-webkit-media-controls-panel {
+    width: calc(100% + 30px); 
+} */
+
+/*flex*/
+.fbox{
+    display: box;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    display: -webkit-flex;
+}
+.fbox .item{
+    flex: 1;
+}
+/*清浮动*/
+.clearfix{
+	*zoom:1
+}
+.clearfix:after,.clearfix:before{
+	content:" ";
+	display:block;
+	height:0;
+	line-height:0;
+	visibility:hidden;
+	clear:both; 
+}
+/*文本垂直居中*/
+.text-middle{ 
+	display: -webkit-flex;
+	display: flex;
+	-webkit-align-items: center;
+	align-items: center;
+	flex-direction:column;
+	-webkit-justify-content: center;
+	justify-content: center;  
+}
+/* 图片上下居中 */
+.img-middle{
+	display: flex;
+    align-items: center;
+}
+/*清楚inline-block 间隙*/
+.clear-spacing{
+	font-size: 0;
+	letter-spacing: -4px;
+}
+.clear-spacing h1,.clear-spacing h2,.clear-spacing h3,.clear-spacing h4,.clear-spacing h5,.clear-spacing h6,.clear-spacing div,.clear-spacing p,.clear-spacing dl,.clear-spacing dt,.clear-spacing dd,.clear-spacing ol,.clear-spacing ul,.clear-spacing li,.clear-spacing form,.clear-spacing table,.clear-spacing th,.clear-spacing td,.clear-spacing a,.clear-spacing img,.clear-spacing span,.clear-spacing strong,.clear-spacing var,.clear-spacing em,.clear-spacing input,.clear-spacing textarea,.clear-spacing select,.clear-spacing option{
+	letter-spacing: normal;
+}
+/*单行文本缩略*/
+.text-of{
+	overflow: hidden;
+	text-overflow:ellipsis;
+	white-space: nowrap;
+}
