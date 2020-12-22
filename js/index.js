@@ -1,7 +1,7 @@
 
 // 画布宽高
-var cWidth = 355
-var cHeight = 800
+var cWidth = 345
+var cHeight = 1000
 var storageCanvasData = [];//缓存步骤数据
 var canvasIdx = 0;//步骤下标
 var setIdx = 0;//对象下标
@@ -12,7 +12,26 @@ $("#main").attr({width:cWidth,height:cHeight})
 // 实例化对象
 var canvas = new fabric.Canvas('main');
 $("canvas").css("touch-action","auto");
-canvas.selection = false;	
+$(document).on('touchstart',function(e){
+	var otouch = e.originalEvent.targetTouches[0];
+	var oy = otouch.pageY+$(".canvas-box").scrollTop();
+	$(document).on('touchmove',function(e){
+		var touch = e.originalEvent.targetTouches[0];
+		var y = touch.pageY+$(".canvas-box").scrollTop();
+		var cha = 0;
+		var maxtop =  cHeight-$('.canvas-box').height()
+		cha = $(".canvas-box").scrollTop()+(oy-y)
+		if(cha>=maxtop){
+			cha = maxtop
+		}
+		if(cha<=0){
+			cha = 0
+		}
+		$(".canvas-box").scrollTop(cha)
+	})
+})
+canvas.selection = false;
+canvas.cancelable=true
 // 编辑框内边距
 fabric.Object.prototype.set({
 	padding:5
