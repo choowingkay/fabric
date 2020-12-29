@@ -1,22 +1,50 @@
-html,body{height: 100%;background-color: #333;}
+html,body{height: 100%;background-color: #F2F2F2;}
 .container{height: 100%;display: flex;flex-direction: column;}
-#main{background-color: #f0f0f0;overflow-y: scroll;}
-.btn-box{display: flex;align-items: center;justify-content: center;position: fixed;left: 0;top: 0;width: 100%;height: 50px;box-sizing: border-box;background-color: #333;z-index: 2;}
+#main{background-color: #fff;overflow-y: scroll;}
+.btn-box{display: flex;align-items: center;justify-content: center;position: fixed;left: 0;top: 0;width: 100%;height: 50px;box-sizing: border-box;z-index: 2;background-color: #f2f2f2;}
 .btn-box2{background-color: #fff;top: auto;bottom: 0;}
-.btn-box .btn{color: #fff;padding: 10px;flex: 1;text-align: center;}
-.btn-box2 .btn{color: #333;}
+.btn-box .btn{color: #666;padding: 10px;flex: 1;text-align: center;opacity: .5;display: flex;align-items: center;justify-content: center;}
+.btn-box .save{background: url(../img/baocunanniu.png)no-repeat center;background-size: auto 100%;color: #fff;}
+.btn-box .btn .icon{width: 20px;height: 20px;margin-right: 5px;}
+.btn-box .active{opacity: 1;}
+.btn-box2 .btn{color: #333;opacity: 1;flex-direction: column;}
+.btn-box2 .btn .icon{margin-right: 0;}
+.btn-box2 .btn h3{font-size: 14px;margin-top: 2px;}
 .canvas-box{height: 100%;box-sizing: border-box;padding: 60px 0;overflow-y: auto;}
 .canvas-box-inner{position: relative;}
 .canvas-container{margin: 0 auto;}
 .gd-line{position: absolute;right: 0;top: 0;height: 100px;width: 10px;background-color: rgba(255,255,255,.5);display: none;z-index: 3;}
 .input-box{background-color: #fff;width: 100%;display: none;padding: 10px;box-sizing: border-box;}
-.text-ctrl{position: fixed;left: 0;bottom: 0;z-index: 2;background-color: #fff;display: none;width: 100%;}
+.input-box .btn-boxs{display: flex;margin-top: 10px;border: 1px solid #C3C3C3;border-radius: 5px;}
+.input-box .btn-boxs .sub{flex: 1;text-align: center;padding: 10px;border-right: 1px solid #C3C3C3;}
+.input-box .btn-boxs .sub:last-child{border-right: 0;}
+.text-ctrl{position: fixed;left: 0;bottom: 0;z-index: 2;background-color: #fff;display: none;width: 100%;background-color: #fff;}
+#textSize{margin-top: 10px;}
+.font-size-outer{background-color: #fff;padding:5px 10px;}
+.family-outer{background-color: #fff;padding:5px 10px;margin-top: 10px;}
+.img-ctrl{position: fixed;left: 0;bottom: 0;z-index: 2;background-color: #fff;display: none;width: 100%;}
+.img-ctrla{display: block;}
 .text-ctrla{display: block;}
 .text-ctrl-inner{display: flex;}
-.text-ctrl .sub{flex: 1;text-align: center;padding: 10px;}
-.input-boxa{display: flex;}
-#textIpt{flex: 1;margin:0 10px;}
-.text-style{padding: 10px;display: none;}
+.text-ctrl-inner .sub{flex: 1;display: flex;padding: 10px;height: 50px;box-sizing: border-box;align-items: center;justify-content: center;}
+.input-boxa{display: block;}
+#textIpt{width: 100%;display: block;box-sizing: border-box;border: 1px solid #C3C3C3;;font-size: 16px;height: 75px;line-height: 25px;padding: 0 10px;border-radius: 5px;}
+.text-style{display: none;background-color: #f2f2f2;}
 .text-stylea{display: block;}
-.text-style .tt{}
+.text-style .tt{margin-top: 10px;}
 .text-style .range{width: 100%;color:#DB639B ;}
+.family-list{height: 90px;overflow-y: scroll;margin-top: 10px;}
+.family-list .lis{line-height: 30px;}
+.family-list .active{background-color: #EDEDED;}
+.text-attr{display: flex;padding: 5px 0;background-color: #fff;margin-top: 10px;}
+.text-attr .attr{flex: 1;text-align: center;line-height: 30px;}
+.text-attr .active{color: #0075FF;}
+.color-box{background-color: #F2F2F2;display: none;}
+.color-boxa{display: block;}
+.opacity-box{background-color: #fff;padding:5px 10px;}
+.color-box .range{width: 100%;}
+.color-chose{background-color: #fff;margin-top: 10px;padding: 10px;padding-top: 0;}
+.color-chose .colors{float: left;width: 50px;height: 50px;border-radius: 5px;margin-left: 8px;box-sizing: border-box;border: 2px solid #fff;padding: 2px;margin-top: 10px;}
+.seven .inner{background:url(../img/sevencolor.jpg)no-repeat center ;background-size: 100% 100%;}
+.color-chose .colors .inner{width: 100%;height: 100%;border-radius: 5px;border: 1px solid #C3C3C3;box-sizing: border-box;}
+.color-chose .active{border: 2px solid #4D9DFF;}

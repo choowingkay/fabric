@@ -11,9 +11,9 @@
 <body>
 	<div class="container">
 		<div class="btn-box">
-			<div class="btn" onclick="prveStep()">上一步</div>
-			<div class="btn" onclick="nextStep()">下一步</div>
-			<div class="btn" onclick="createPoster()">预览</div>
+			<div class="btn prve" onclick="prveStep()"><img class="icon" src="./img/quxiao.png" alt="">撤销</div>
+			<div class="btn next" onclick="nextStep()"><img class="icon" src="./img/chongzuo.png" alt="">恢复</div>
+			<div class="btn active save" onclick="createPoster()">保存</div>
 		</div>
 		<div class="canvas-box">
 			<div class="canvas-box-inner">
@@ -21,34 +21,90 @@
 			</div>
 		</div>
 		<div class="btn-box btn-box2">
-			<div class="btn" onclick="addText('添加文字',kayCanvasData.length)">加字</div>
+			<div class="btn">
+				<img src="./img/huanmoban.png" alt="" class="icon">
+				<h3>换模板</h3>
+			</div>
+			<div class="btn" onclick="addText('添加文字')">
+				<img src="./img/haunwenz.png" alt="" class="icon">
+				<h3>加字</h3>
+			</div>
 			<label class="btn">
-				加图
+				<img src="./img/huantup.png" alt="" class="icon">
+				<h3>加图</h3>
 				<input type="file" id="upimg" name="file" accept="image/png,image/jpg,image/jpeg" id="file" onchange="changeToop();" style="display:none;" />
 			</label>
+		</div>
+	</div>
+	<div class="img-ctrl">
+		<div class="text-ctrl-inner">
+			<div class="sub">
+				<label class="btn">
+					替换
+					<input type="file" id="rupimg" name="file" accept="image/png,image/jpg,image/jpeg" id="file" onchange="replaceImg();" style="display:none;" />
+				</label>
+			</div>
+			<div class="sub" onclick="objUp()">上一层</div>
+			<div class="sub" onclick="objDown()">下一层</div>
+			<div class="sub" onclick="imgsave()">完成</div>
 		</div>
 	</div>
 	<div class="text-ctrl">
 		<div class="text-ctrl-inner">
 			<div class="sub" onclick="setText()">编辑</div>
+			<div class="sub" onclick="setColor()">颜色</div>
 			<div class="sub" onclick="setStyle()">样式</div>
-			<div class="sub" onclick="save()">完成</div>
+			<div class="sub" onclick="textsave()">完成</div>
 		</div>
 		<div class="input-box">
-			<input type="text" id="textIpt">
+			<!-- <input type="text" id="textIpt"> -->
+			<textarea id="textIpt"></textarea>
+			<div class="btn-boxs">
+				<div class="sub" onclick="objUp()">上一层</div>
+				<div class="sub" onclick="objDown()">下一层</div>
+			</div>
+		</div>
+		<div class="color-box">
+			<div class="opacity-box">
+				<div class="tt">透明度</div>
+				<input class="range"  id="textopacity" type="range" min="1" max="100" name="" id="" />
+			</div>
+			<div class="opacity-box">
+				<input class="range"  id="textColor" type="color" name="" id="" />
+			</div>
+			<div class="color-chose clearfix">
+				<div class="colors seven"><div class="inner"></div></div>
+			</div>
 		</div>
 		<div class="text-style">
-			<div class="tt">字号</div>
-			<input class="range"  id="textSize" type="range" min="1" max="200" name="" id="" />
-			<div class="tt">字号</div>
-			<select onchange="changeFontFamily(this)">
-				<option value="Microsoft YaHei">微软雅黑</option>
-				<option value="宋体">宋体</option>
-			</select>
+			<div class="font-size-outer">
+				<div class="tt">字号</div>
+				<input class="range"  id="textSize" type="range" min="1" max="100" name="" id="" />
+			</div>
+			<div class="family-outer">
+				<div class="tt">字体</div>
+				<div class="family-list">
+					
+				</div>
+			</div>
+			<div class="text-attr">
+				<div class="attr">
+					纵向
+				</div>
+				<div class="attr">
+					加粗
+				</div>
+				<div class="attr">
+					斜体
+				</div>
+				<div class="attr">
+					下划线
+				</div>
+			</div>	
 		</div>
 	</div>
 </body>
-<script src="js/fabric.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/fabric.min-3.6.4.js" type="text/javascript" charset="utf-8"></script>
 <script src="js/customiseControls.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="js/jquery-1.8.3.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="js/index.js" type="text/javascript" charset="utf-8"></script>
