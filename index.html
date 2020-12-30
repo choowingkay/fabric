@@ -38,15 +38,49 @@
 	</div>
 	<div class="img-ctrl">
 		<div class="text-ctrl-inner">
-			<div class="sub">
-				<label class="btn">
-					替换
-					<input type="file" id="rupimg" name="file" accept="image/png,image/jpg,image/jpeg" id="file" onchange="replaceImg();" style="display:none;" />
-				</label>
+			<div class="sub" onclick="huanImg()">
+				替换
 			</div>
 			<div class="sub" onclick="objUp()">上一层</div>
 			<div class="sub" onclick="objDown()">下一层</div>
 			<div class="sub" onclick="imgsave()">完成</div>
+		</div>
+		<div class="huan-img">
+			<div class="img-cate">
+				<div class="item active">
+					<span>收藏</span>
+				</div>
+				<div class="item">
+					<span>人物</span>
+				</div>
+				<div class="item">
+					<span>家居</span>
+				</div>
+				<div class="item">
+					<span>配图</span>
+				</div>
+				<div class="item">
+					<span>纹理</span>
+				</div>
+			</div>
+			<div class="material-list">
+				<div class="item">
+					<label>
+						<img class="icon" src="./img/tianjiasucai.png" >
+						<input type="file" id="rupimg" name="file" accept="image/png,image/jpg,image/jpeg" id="file" onchange="replaceImg();" style="display:none;" />
+					</label>
+				</div>
+				<div class="item">
+					<div class="inner">
+						<img class="image" src="./img/baocunanniu.png" >
+					</div>
+				</div>
+				<div class="item">
+					<div class="inner">
+						<img class="image" src="./img/haunwenz.png" >
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 	<div class="text-ctrl">
@@ -58,7 +92,9 @@
 		</div>
 		<div class="input-box">
 			<!-- <input type="text" id="textIpt"> -->
-			<textarea id="textIpt"></textarea>
+			<div class="input-outer">
+				<textarea id="textIpt"></textarea>
+			</div>
 			<div class="btn-boxs">
 				<div class="sub" onclick="objUp()">上一层</div>
 				<div class="sub" onclick="objDown()">下一层</div>
@@ -67,19 +103,19 @@
 		<div class="color-box">
 			<div class="opacity-box">
 				<div class="tt">透明度</div>
-				<input class="range"  id="textopacity" type="range" min="1" max="100" name="" id="" />
-			</div>
-			<div class="opacity-box">
-				<input class="range"  id="textColor" type="color" name="" id="" />
+				<input class="range"  id="textopacity" type="range" min="1" max="100" name="" />
 			</div>
 			<div class="color-chose clearfix">
-				<div class="colors seven"><div class="inner"></div></div>
+				<label class="colors seven">
+					<div class="inner"></div>
+					<input class="range" id="textcolor" type="color" name=""  />
+				</label>
 			</div>
 		</div>
 		<div class="text-style">
 			<div class="font-size-outer">
 				<div class="tt">字号</div>
-				<input class="range"  id="textSize" type="range" min="1" max="100" name="" id="" />
+				<input class="range"  id="textSize" type="range" min="1" max="100" name="" />
 			</div>
 			<div class="family-outer">
 				<div class="tt">字体</div>

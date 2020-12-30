@@ -70,7 +70,38 @@ $(function(){
 			canvasIdx = storageCanvasData.length-1;
 		},300)
 	}
+	//监听颜色
+	document.getElementById('textcolor').oninput = function(e){
+		clearTimeout(timer)
+		setThat.set({
+			fill:document.getElementById('textcolor').value
+		})
+		$(".color-box .colors").eq(0).addClass('active').siblings().removeClass('active')
+		canvas.renderAll();
+		timer = setTimeout(()=>{
+			storageCanvasData.push(canvas.toJSON());
+			canvasIdx = storageCanvasData.length-1;
+		},300)
+	}
+	// 选择替换素材
+	$(".material-list").on('click','.item',function(){
+		if($(this).index()!=0){
+			var img = new Image();
+			img.src = $(this).find('img').attr('src');
+			img.onload = function(){
+				setThat._element.attributes[0].nodeValue = $(this).find('img').attr('src');
+				setThat.set({
+					width:img.width,
+					height:img.height,
+				})
+				canvas.renderAll();
+				storageCanvasData.push(canvas.toJSON());
+				canvasIdx = storageCanvasData.length-1;
+			}
+		}
+	})
 })
+
 // 设置画布宽高
 $("#main").attr({width:cWidth,height:cHeight});
 // 实例化对象
@@ -85,32 +116,37 @@ canvas.on("selection:created", function (e) {
 		$(".text-ctrl").addClass('text-ctrla')
 	}else{
 		hideCtrl()
-		$("img-ctrl").addClass('img-ctrla')
+		$(".img-ctrl").addClass('img-ctrla')
 	}
 });
-canvas.on("selection:updated", function (e) { 
+canvas.on("selection:updated", function (e) {
+	let bool = false;
+	if(setThat.text){
+		if(!e.target.text){bool=true}
+	}else{
+		if(!e.target._element){bool=true}
+	}
+	if(bool){
+		hideCtrl()
+		$(".canvas-box").scrollTop($(".canvas-box").scrollTop()-pabh);
+		pabh = 0;
+		$(".canvas-box").css({paddingBottom:'60px'});
+	}
 	setThat = e.target;
 	if(setThat.text){
-		$("img-ctrl").removeClass('img-ctrla')
 		$(".text-ctrl").addClass('text-ctrla')
 		if($(".input-box").hasClass('input-boxa')){
 			document.getElementById('textIpt').value = setThat.text;
-		}
-		if($(".color-box").hasClass('color-boxa')){
+		}else if($(".color-box").hasClass('color-boxa')){
 			let idx = 0;
 			for (var i = 0; i < colorList.length; i++) {
 				if(setThat.fill==colorList[i]){
 					idx = i+1
 				}
 			}
-			if(idx!=0){
-				$(".color-box .colors").eq(idx).addClass('active').siblings().removeClass('active')
-			}else{
-				$(".color-box .colors").eq(0).addClass('active').siblings().removeClass('active')
-			}
+			$(".color-box .colors").eq(idx).addClass('active').siblings().removeClass('active')
 			document.getElementById('textopacity').value = setThat.opacity*100;
-		}
-		if($(".text-style").hasClass('text-stylea')){
+		}else if($(".text-style").hasClass('text-stylea')){
 			document.getElementById('textSize').value = setThat.fontSize;
 			// 默认字体
 			for(var i in familyList){
@@ -139,14 +175,20 @@ canvas.on("selection:updated", function (e) {
 			}else{
 				$('.text-attr .attr').eq(3).removeClass('active')
 			}
+		}else{
+			$(".canvas-box").scrollTop($(".canvas-box").scrollTop()-pabh);
+			pabh = 0;
+			$(".canvas-box").css({paddingBottom:'60px'});
 		}
 	}else{
-		hideCtrl()
 		document.getElementsByClassName('img-ctrl')[0].classList.add("img-ctrla");
 	}
 });
 canvas.on("selection:cleared", function (e) { 
 	hideCtrl()
+	$(".canvas-box").scrollTop($(".canvas-box").scrollTop()-pabh);
+	pabh = 0;
+	$(".canvas-box").css({paddingBottom:'60px'});
 });
 // 改变元素监听
 canvas.on("object:modified", function (e) { 
@@ -225,18 +267,33 @@ fabric.Object.prototype.customiseCornerIcons({
 },function(){
 	canvas.renderAll();
 });
+//替换
+function huanImg(){
+	$(".huan-img").addClass('huan-imga')
+	$(".img-ctrl .text-ctrl-inner .sub").eq(0).addClass('active')
+	$(".canvas-box").css({paddingBottom:$(".img-ctrl").height()+'px'});
+	$(".canvas-box").scrollTop($(".canvas-box").scrollTop()-pabh);
+	pabh = $(".img-ctrl").height();
+	$(".canvas-box").scrollTop($(".canvas-box").scrollTop()+pabh);
+}
 // 替换图片
 function replaceImg(){
 	var file = document.getElementById('rupimg').files[0];
 	var reader = new FileReader();
 	reader.readAsDataURL(file);
 	reader.onloadend = function(e) {
-		setThat._element.attributes[0].nodeValue = e.target.result;
-		setTimeout(function(){
+		var img = new Image();
+		img.src = e.target.result;
+		img.onload = function(){
+			setThat._element.attributes[0].nodeValue = e.target.result;
+			setThat.set({
+				width:img.width,
+				height:img.height,
+			})
 			canvas.renderAll();
 			storageCanvasData.push(canvas.toJSON());
 			canvasIdx = storageCanvasData.length-1;
-		},300)
+		}
 	};
 }
 // 选图片
@@ -309,6 +366,7 @@ function setText(){
 	document.getElementById('textIpt').value = setThat.text;
 	hideTextCtrl()
 	$(".input-box").addClass('input-boxa')
+	$(".text-ctrl .sub").eq(0).addClass('active')
 	$(".canvas-box").css({paddingBottom:$(".text-ctrl").height()+'px'});
 	$(".canvas-box").scrollTop($(".canvas-box").scrollTop()-pabh);
 	pabh = $(".text-ctrl").height();
@@ -318,17 +376,14 @@ function setText(){
 function setColor(){
 	hideTextCtrl()
 	$(".color-box").addClass('color-boxa')
+	$(".text-ctrl .sub").eq(1).addClass('active')
 	let idx = 0;
 	for (var i = 0; i < colorList.length; i++) {
 		if(setThat.fill==colorList[i]){
 			idx = i+1
 		}
 	}
-	if(idx!=0){
-		$(".color-box .colors").eq(idx).addClass('active').siblings().removeClass('active')
-	}else{
-		$(".color-box .colors").eq(0).addClass('active').siblings().removeClass('active')
-	}
+	$(".color-box .colors").eq(idx).addClass('active').siblings().removeClass('active')
 	document.getElementById('textopacity').value = setThat.opacity*100;
 	$(".canvas-box").css({paddingBottom:$(".text-ctrl").height()+'px'});
 	$(".canvas-box").scrollTop($(".canvas-box").scrollTop()-pabh);
@@ -341,6 +396,7 @@ function setStyle(){
 	document.getElementById('textSize').value = setThat.fontSize;
 	hideTextCtrl()
 	$(".text-style").addClass('text-stylea')
+	$(".text-ctrl .sub").eq(2).addClass('active')
 	$(".canvas-box").css({paddingBottom:$(".text-ctrl").height()+'px'});
 	$(".canvas-box").scrollTop($(".canvas-box").scrollTop()-pabh);
 	pabh = $(".text-ctrl").height();
@@ -498,6 +554,9 @@ function hideTextCtrl(){
 	$(".input-box").removeClass('input-boxa')
 	$(".color-box").removeClass('color-boxa')
 	$(".text-style").removeClass('text-stylea')
+	$(".text-ctrl .sub").removeClass('active')
+	$(".huan-img").removeClass('huan-imga')
+	$(".img-ctrl .text-ctrl-inner .sub").eq(0).removeClass('active')
 }
 //上一层
 function objUp(){
